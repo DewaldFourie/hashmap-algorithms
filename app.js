@@ -40,7 +40,12 @@ class HashMap {
         for (let i = 0; i < key.length; i++) {
             hash = (hash + key.charCodeAt(i)) % this._buckets.length;
         }
-        return hash;
+        // Bounds checking
+        if (hash < 0 || hash >= this._buckets.length) {
+            throw new Error("Trying to access index out of bound");
+        }
+
+        return hash; 
     }
 
     // method to add or update a key-value pair in the hash map 
@@ -172,7 +177,7 @@ class HashMap {
     values() {
         // create an all values array
         const allValues = [];
-        // push values in each bucket to all values
+        // push the values in each bucket to all values
         for (const bucket of this._buckets) {
             if (bucket) {
                 for (const [, value] of bucket) {
@@ -180,9 +185,76 @@ class HashMap {
                 }
             }
         }
+        return allValues
     }
 
     // method that returns an array containing all key value pairs in the hash map
-    
+    entries() {
+        // create an all entries array
+        const allEntries = []
+        // push the entries in each bucket to all entries
+        for (const bucket of this._buckets) {
+            if (bucket) {
+                for (const [key, value] of bucket) {
+                    allEntries.push([key, value])
+                }
+            }
+        }
+        return allEntries
+    }
 
 }
+
+// Class testing console log methods
+
+const myHashMap = new HashMap();
+myHashMap.set("name", "John");
+myHashMap.set("surname", "Doe")
+myHashMap.set("age", 25);
+myHashMap.set("job", "Dentist")
+
+console.log("all entries:");
+console.log(myHashMap.entries());
+console.log("");
+
+console.log("all keys:");
+console.log(myHashMap.keys());
+console.log("");
+
+console.log("all values:");
+console.log(myHashMap.values());
+console.log("");
+
+console.log("get name:");
+console.log(myHashMap.get("name"));
+console.log("");
+
+console.log("get gender:");
+console.log(myHashMap.get("gender"));
+console.log("");
+
+console.log("has gender?");
+console.log(myHashMap.has("gender"));
+console.log("");
+
+console.log("has job?");
+console.log(myHashMap.has("job"));
+console.log("");
+
+console.log("length:");
+console.log(myHashMap.mapLength());
+console.log("");
+
+myHashMap.remove("job")
+
+console.log("after remove job:");
+console.log(myHashMap.entries());
+console.log("");
+
+myHashMap.clear()
+
+console.log("after clear all");
+console.log(myHashMap.entries());
+console.log("");
+
+
